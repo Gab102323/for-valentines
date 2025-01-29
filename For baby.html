@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffccff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+            margin: 0;
+        }
+        .container {
+            position: relative;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #ff4081;
+        }
+        .buttons {
+            margin-top: 20px;
+            position: relative;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            position: relative;
+        }
+        .yes {
+            background-color: #ff4081;
+            color: white;
+        }
+        .no {
+            background-color: #ccc;
+            color: black;
+            position: absolute;
+        }
+        .meme-container {
+            display: none;
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+        }
+        .meme-container img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        #countdown {
+            display: none;
+            font-size: 18px;
+            color: #ff4081;
+            margin-top: 20px;
+        }
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 24px;
+            animation: floatUp 2s linear infinite;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.0.0"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>My Beautiful Girlfriend, can I be your Valentine? 💖</h1>
+        <div class="buttons">
+            <button class="yes" onclick="startCelebration()">Yes</button>
+            <button class="no" id="noButton" onmouseover="moveButton()">No</button>
+        </div>
+        <p id="message" style="display: none; color: #ff4081; font-size: 20px; margin-top: 20px;">Yay! See you on February 14, 2025! 💕</p>
+        <p id="countdown"></p>
+    </div>
+
+    <div class="meme-container" id="meme">
+        <img src="https://i.imgflip.com/4t0m5.jpg" alt="Funny Meme">
+    </div>
+
+    <script>
+        function startCelebration() {
+            document.getElementById("message").style.display = "block";
+            document.getElementById("countdown").style.display = "block";
+            document.getElementById("meme").style.display = "none";
+            confetti({
+                particleCount: 200,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            createHearts();
+            startCountdown();
+        }
+
+        function startCountdown() {
+            const eventDate = new Date("February 14, 2025 16:00:00").getTime();
+            const countdownElement = document.getElementById("countdown");
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = eventDate - now;
+                
+                if (distance < 0) {
+                    countdownElement.innerHTML = "It's Valentine's Day! ❤️";
+                    return;
+                }
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                countdownElement.innerHTML = `Countdown to our date: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        function moveButton() {
+            const button = document.getElementById("noButton");
+            const maxWidth = window.innerWidth - button.offsetWidth - 20;
+            const maxHeight = window.innerHeight - button.offsetHeight - 20;
+            const x = Math.random() * maxWidth;
+            const y = Math.random() * maxHeight;
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+            
+            const meme = document.getElementById("meme");
+            meme.style.display = "block";
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement("div");
+                    heart.innerHTML = "❤️";
+                    heart.classList.add("heart");
+                    document.body.appendChild(heart);
+                    
+                    const x = Math.random() * window.innerWidth;
+                    heart.style.left = `${x}px`;
+                    heart.style.top = "100vh";
+                    
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
